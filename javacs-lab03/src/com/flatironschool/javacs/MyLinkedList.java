@@ -63,8 +63,10 @@ public class MyLinkedList<E> implements List<E> {
 		mll.add(1);
 		mll.add(2);
 		mll.add(3);
+		Integer val = mll.remove(1);
 		System.out.println(Arrays.toString(mll.toArray()) + " size = " + mll.size());
 		
+
 		mll.remove(new Integer(2));
 		System.out.println(Arrays.toString(mll.toArray()) + " size = " + mll.size());
 	}
@@ -85,7 +87,19 @@ public class MyLinkedList<E> implements List<E> {
 
 	@Override
 	public void add(int index, E element) {
-		// TODO: fill this in
+		if (index == 0) { //add to front
+			Node addedNode = new Node(element,getNode(0));
+			head = addedNode;
+		} 
+		else if (index == size) { //add to back
+			Node addedNode = new Node(element);
+			getNode(index-1).next = addedNode;
+		}
+		else { //else
+			Node addedNode = new Node(element,getNode(index)); //node with element point to node in that index currently
+			getNode(index-1).next = addedNode; //node before points to new added Node
+		}
+		size++;
 	}
 
 	@Override
@@ -146,7 +160,14 @@ public class MyLinkedList<E> implements List<E> {
 
 	@Override
 	public int indexOf(Object target) {
-		// TODO: fill this in
+		Node node = head;
+		int count = 0;
+		for (; node != null; node = node.next) {
+			if (equals(target,node.cargo)) {
+				return count;
+			}
+			count++;
+		}
 		return -1;
 	}
 
@@ -201,13 +222,45 @@ public class MyLinkedList<E> implements List<E> {
 
 	@Override
 	public boolean remove(Object obj) {
-		// TODO: fill this in
+		int index = indexOf(obj);
+		if (index != -1) { //if obj is in linkedlist
+			if (size == 1) { //list has 1
+				head = null;
+			}
+			else if (index == 0) { //remove beginning
+				head = getNode(1);
+			}
+			else if (index == size-1) { //remove last
+				getNode(index-1).next = null;
+			}
+			else {
+				getNode(index-1).next = getNode(index+1);
+			}
+			size--;
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public E remove(int index) {
-		// TODO: fill this in
+		if (index < size && index >= 0) { //if obj is in linkedlist
+			E removedCargo = get(index);
+			if (size == 1) { //list has 1
+				head = null;
+			}
+			else if (index == 0) { //remove beginning
+				head = getNode(1);
+			}
+			else if (index == size-1) { //remove last
+				getNode(index-1).next = null;
+			}
+			else {
+				getNode(index-1).next = getNode(index+1);
+			}
+			size--;
+			return removedCargo;
+		}
 		return null;
 	}
 
